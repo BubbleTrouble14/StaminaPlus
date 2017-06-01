@@ -9,4 +9,4 @@
 !version-check.json
 *.db
 *.DS_Store
-/gradle/*
+
