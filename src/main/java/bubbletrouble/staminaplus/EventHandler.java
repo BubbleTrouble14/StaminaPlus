@@ -8,7 +8,6 @@ import bubbletrouble.staminaplus.network.StaminaValueMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -24,8 +23,8 @@ public class EventHandler
     public void onPlayerJoin(PlayerLoggedInEvent evt)
     {
     	EntityPlayer p = evt.player;
-	//	IStamina stam = p.getCapability(StaminaCapability.Stamina, null);
-	//	stam.setStamina(300);
+		IStamina stam = p.getCapability(StaminaCapability.Stamina, null);
+		stam.setStaminaMultiplier(1F);;
     }
     
     @SubscribeEvent   
@@ -79,7 +78,7 @@ public class EventHandler
     	clientTicks++;
 		if(clientTicks >= 20)
 		{
-			p.sendMessage(new TextComponentString(String.valueOf(ClientStamina.getStamina())));
+			//p.sendMessage(new TextComponentString(String.valueOf(ClientStamina.getStamina())));
 			clientTicks = 0;
 		}
     	if(isPlayerMoving(evt, p))
@@ -109,7 +108,7 @@ public class EventHandler
     
     //Server Side
     private int ticks;
-    private int standingTicks;
+    public static int standingTicks;
     private float standingMultiplier = 0F;
 
     private void updateServerSide(EntityPlayer p, PlayerTickEvent evt) 
@@ -122,7 +121,7 @@ public class EventHandler
     		{
     			ticks = 0;
     		//	p.sendMessage(new TextComponentString(String.valueOf(stam.getStamina())));
-    			System.out.println(stam.getStamina());
+    		//	System.out.println(stam.getStamina());
     		}
     	
     		if(playerAction != null)
@@ -132,24 +131,24 @@ public class EventHandler
         		//TODO make sure it is more then 1 tick
 	    		if(ticks == 4)
 	    		{
-	    			System.out.println(standingMultiplier);
+	    			System.out.println(stam.getStaminaMultiplier());
 			    	switch(type)
 			    	{
 			    		case WALKING : 
 			    		{
-			    			standingMultiplier = 0;
-			    			stam.increaseStamina(0.5F);
+			    			stam.setStaminaMultiplier(1F);
+			    			stam.increaseStamina(0.05F);
 			    		}
 			    		break;
 			    		case SPRINTING : 
 			    		{
-			    			standingMultiplier = 0;
-			    			stam.decreaseStamina(4F); 
+			    			stam.setStaminaMultiplier(1F);
+			    			stam.decreaseStamina(0.4F); 
 			    		}
 			    		break;
 			       		case SNEAKING : 
 			       		{
-			    			standingMultiplier = 0;
+			    			stam.setStaminaMultiplier(1F);
 			       			stam.increaseStamina(0.2F);  
 			       		}
 			    		break;
@@ -160,20 +159,21 @@ public class EventHandler
 			       			{
 			       				standingTicks = 0;
 			       				if(standingMultiplier<=6)standingMultiplier += 1F;
+				    			stam.setStaminaMultiplier(standingMultiplier);
 			       			}
-			       			stam.increaseStamina(2F * standingMultiplier);   
+			       			stam.increaseStamina(0.2F);   
 			       		}
 			    		break;
+			    		default : standingMultiplier = 0;
 	    			}
-	    		}
-	    		
+	    		}	
     		}
 	}
     
     @SubscribeEvent
     public void onFOV(FOVUpdateEvent evt)
     {
-    	evt.setNewfov(100);
+    //	evt.setNewfov(100);
     }
     
     @SubscribeEvent

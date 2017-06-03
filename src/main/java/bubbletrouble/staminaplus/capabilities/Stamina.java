@@ -4,6 +4,7 @@ public class Stamina implements IStamina
 {
 	private float stamina;
 	private float maxStamina;
+	private float staminaMultiplier = 1F;
 	
 	@Override
 	public void setStamina(float valse) 
@@ -25,7 +26,7 @@ public class Stamina implements IStamina
 			stamina = maxStamina;
 		}
 	//	if(stamina >= maxStamina)stamina = getMaxStatmina();
-		else this.stamina += value;
+		else this.stamina += value * getStaminaMultiplier();
 	}
 
 	@Override
@@ -49,6 +50,19 @@ public class Stamina implements IStamina
 	public float getMaxStatmina() 
 	{
 		return maxStamina;
+	}
+
+	@Override
+	public float getStaminaMultiplier() 
+	{
+		if(staminaMultiplier == 0F) return 1F;
+		return staminaMultiplier;
+	}
+
+	@Override
+	public void setStaminaMultiplier(float value)
+	{
+		staminaMultiplier = value;
 	}
 
 }

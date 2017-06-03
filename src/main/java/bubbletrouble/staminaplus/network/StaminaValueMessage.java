@@ -1,12 +1,10 @@
 package bubbletrouble.staminaplus.network;
 
 import bubbletrouble.staminaplus.ClientStamina;
-import bubbletrouble.staminaplus.PlayerAction;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.IThreadListener;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;

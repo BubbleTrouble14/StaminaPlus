@@ -1,5 +1,6 @@
 package bubbletrouble.staminaplus.network;
 
+import bubbletrouble.staminaplus.EventHandler;
 import bubbletrouble.staminaplus.capabilities.IStamina;
 import bubbletrouble.staminaplus.capabilities.StaminaCapability;
 import io.netty.buffer.ByteBuf;
@@ -46,6 +47,8 @@ public class PlayerJumpMessage implements IMessage
 	static void processMessage(PlayerJumpMessage message, EntityPlayerMP p)
 	{
 		IStamina stam = p.getCapability(StaminaCapability.Stamina, null);
-		stam.decreaseStamina(10f);
+		stam.setStaminaMultiplier(1F);
+		stam.decreaseStamina(1);
+		EventHandler.standingTicks = 0;
 	}
 }

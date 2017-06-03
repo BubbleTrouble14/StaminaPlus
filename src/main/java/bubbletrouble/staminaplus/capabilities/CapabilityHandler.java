@@ -15,6 +15,6 @@ public class CapabilityHandler
     public void attachPlayerCapability(AttachCapabilitiesEvent<Entity> event)
     {
         if (!(event.getObject() instanceof EntityPlayer)) return;
-        	event.addCapability(STAMINA, new StaminaCapability(300F));   	
+        	event.addCapability(STAMINA, new StaminaCapability(200F));   	
     }      
 }	

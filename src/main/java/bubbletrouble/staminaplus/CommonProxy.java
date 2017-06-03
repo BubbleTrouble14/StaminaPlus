@@ -4,6 +4,7 @@ import bubbletrouble.staminaplus.capabilities.CapabilityHandler;
 import bubbletrouble.staminaplus.capabilities.IStamina;
 import bubbletrouble.staminaplus.capabilities.Stamina;
 import bubbletrouble.staminaplus.capabilities.StaminaStorage;
+import bubbletrouble.staminaplus.gui.GuiOverlay;
 import bubbletrouble.staminaplus.network.StaminaValueMessage;
 import bubbletrouble.staminaplus.network.PlayerActionMessage;
 import bubbletrouble.staminaplus.network.PlayerJumpMessage;
@@ -25,8 +26,8 @@ public class CommonProxy
 
         MinecraftForge.EVENT_BUS.register(new CapabilityHandler());
         MinecraftForge.EVENT_BUS.register(new EventHandler());
-	//	MinecraftForge.EVENT_BUS.register(new GuiOverlay());
-    }
+		MinecraftForge.EVENT_BUS.register(new GuiOverlay());
+    	}
     
     public void preInit(FMLPreInitializationEvent evt)
     {

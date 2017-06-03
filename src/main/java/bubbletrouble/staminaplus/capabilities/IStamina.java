@@ -14,4 +14,8 @@ public interface IStamina
 	
 	public float getMaxStatmina();
 	
+	public float getStaminaMultiplier();
+	
+	public void setStaminaMultiplier(float value);
+	
 }
