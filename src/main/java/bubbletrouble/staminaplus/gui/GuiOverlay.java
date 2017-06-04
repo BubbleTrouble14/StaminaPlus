@@ -4,6 +4,7 @@ import bubbletrouble.staminaplus.ClientStamina;
 import bubbletrouble.staminaplus.Main;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
@@ -17,17 +18,22 @@ public class GuiOverlay extends Gui
 	@SubscribeEvent
 	public void renderGUIOverlay(RenderGameOverlayEvent e)
 	{
-		if (!e.isCancelable() && e.getType().equals(ElementType.EXPERIENCE))
+		EntityPlayer p = Minecraft.getMinecraft().player;
+		int posY = 0;
+		if(p.isInWater() && p.getAir() < 300)
 		{
-			Overlay(e);
+			posY = -10;
+		}else posY = 0;
+		if (!e.isCancelable() && e.getType().equals(ElementType.EXPERIENCE))
+		{	
+			Overlay(e, + posY);
 		}
-
 	}
 	
-	public static void Overlay(RenderGameOverlayEvent evt)
+	public static void Overlay(RenderGameOverlayEvent evt, int posY)
 	{
 		int posX = evt.getResolution().getScaledWidth() / 2 + 10;
-		int posY = evt.getResolution().getScaledHeight() -49;
+		posY = posY + evt.getResolution().getScaledHeight() -49;
 		float stamValue = ClientStamina.getStamina();
 		
         mc.renderEngine.bindTexture(OVERLAY);

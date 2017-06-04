@@ -5,7 +5,8 @@ public enum ActionType
 	WALKING, 
 	SPRINTING, 
 	SNEAKING, 
-	STANDING;
+	STANDING,
+	JUMPING;
 	
 	/*
 	public final int id;
