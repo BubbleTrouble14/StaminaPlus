@@ -9,9 +9,9 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "2.0"
-group= "com.bubbletrouble.gunmod" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "gunmod"
+version = "1.1"
+group= "com.bubbletrouble.staminaplus" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "staminaplus"
 
 minecraft {
     version = "1.11.2-13.20.0.2228"
