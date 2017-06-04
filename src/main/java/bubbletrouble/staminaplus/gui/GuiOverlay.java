@@ -3,14 +3,13 @@ package bubbletrouble.staminaplus.gui;
 import bubbletrouble.staminaplus.ClientStamina;
 import bubbletrouble.staminaplus.Main;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class GuiOverlay extends Gui
+public class GuiOverlay
 {
 	private static final Minecraft mc = Minecraft.getMinecraft();
 	private static final ResourceLocation OVERLAY = new ResourceLocation(Main.MODID, "textures/gui/stamina.png");
@@ -19,18 +18,21 @@ public class GuiOverlay extends Gui
 	public void renderGUIOverlay(RenderGameOverlayEvent e)
 	{
 		EntityPlayer p = Minecraft.getMinecraft().player;
-		int posY = 0;
-		if(p.isInWater() && p.getAir() < 300)
+		if(!p.capabilities.isCreativeMode)
 		{
-			posY = -10;
-		}else posY = 0;
-		if (!e.isCancelable() && e.getType().equals(ElementType.EXPERIENCE))
-		{	
-			Overlay(e, + posY);
+			int posY = 0;
+			if(p.isInWater() && p.getAir() < 300)
+			{
+				posY = -10;
+			}else posY = 0;
+			if (!e.isCancelable() && e.getType().equals(ElementType.EXPERIENCE))
+			{	
+				Overlay(e, + posY);
+			}
 		}
 	}
 	
-	public static void Overlay(RenderGameOverlayEvent evt, int posY)
+	public void Overlay(RenderGameOverlayEvent evt, int posY)
 	{
 		int posX = evt.getResolution().getScaledWidth() / 2 + 10;
 		posY = posY + evt.getResolution().getScaledHeight() -49;

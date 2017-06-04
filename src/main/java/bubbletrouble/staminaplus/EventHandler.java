@@ -77,8 +77,7 @@ public class EventHandler
     int clientTicks;
     //Client Side
     private void updateClientSide(EntityPlayer p, PlayerTickEvent evt) 
-    {
-    	
+    {  	
     	clientTicks++;
 		if(clientTicks >= 20)
 		{
@@ -107,7 +106,6 @@ public class EventHandler
 	    if(!p.onGround && Minecraft.getMinecraft().gameSettings.keyBindJump.isPressed())
 	    {    	
    			Main.modChannel.sendToServer(new PlayerActionMessage(ActionType.JUMPING.name()));
-		 //   Main.modChannel.sendToServer(new PlayerJumpMessage());	    
 	    }  
 	    if(ClientStamina.getStamina() <= 50F && ClientStamina.getStamina() >= 20F)
 	    {
@@ -117,7 +115,12 @@ public class EventHandler
 	    {
 	    	p.capabilities.setPlayerWalkSpeed(0.99F);
 	    }
-	    else p.capabilities.setPlayerWalkSpeed(0.1F);
+	    else if(ClientStamina.getStamina() <= 0F) p.setSprinting(false);
+	    else 
+	    {
+	    	p.capabilities.setPlayerWalkSpeed(0.1F);
+	    	p.setSprinting(true);
+	    }		
 	}	
     
     //Server Side
@@ -135,10 +138,11 @@ public class EventHandler
     		{
     			ticks = 0;
     		//	p.sendMessage(new TextComponentString(String.valueOf(stam.getStamina())));
-    			System.out.println(stam.getStamina());
+    		//TODO
+    	//	System.out.println(stam.getStamina());
     		}
     	
-    		if(playerAction != null)
+    		if(playerAction != null && !p.capabilities.isCreativeMode)
     		{
         		ActionType type = ActionType.valueOf(playerAction);
     			Main.modChannel.sendTo(new StaminaValueMessage(stam.getStamina()), (EntityPlayerMP) p);
@@ -156,7 +160,7 @@ public class EventHandler
 			    		{
 			       			standingMultiplier = 0;
 			    			stam.setStaminaMultiplier(1F);
-			    			stam.decreaseStamina(0.4F); 
+			    			stam.decreaseStamina(0.3F); 
 			    		}
 			    		break;
 			       		case SNEAKING : 
@@ -169,10 +173,10 @@ public class EventHandler
 			       		case STANDING : 
 			       		{
 			       			standingTicks++;
-			       			if(standingTicks >= 20)
+			       			if(standingTicks >= 5)
 			       			{
 			       				standingTicks = 0;
-			       				if(standingMultiplier<=16)standingMultiplier += 1F;
+			       				if(standingMultiplier<=21)standingMultiplier += 1F;
 				    			stam.setStaminaMultiplier(standingMultiplier);
 			       			}
 			       			stam.increaseStamina(0.04F);   
@@ -196,7 +200,6 @@ public class EventHandler
     @SubscribeEvent
     public void livingUpdate(LivingJumpEvent evt)
     {
-    	System.out.println("ff");
     	if(evt.getEntityLiving() instanceof EntityPlayer)
     	{
     		EntityPlayer p = (EntityPlayer) evt.getEntityLiving();
@@ -206,7 +209,6 @@ public class EventHandler
 		    	p.motionY = 0F;
 		    }
 		    else p.motionY = 0.5F;	
-		    System.out.println(ClientStamina.getStamina());
 //		    if(ClientStamina.getStamina() <= 10F)
 //		    {
 //		    	p.capabilities.setPlayerWalkSpeed(0.01F);

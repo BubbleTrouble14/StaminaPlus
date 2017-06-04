@@ -17,7 +17,7 @@ public class Main
 	@Instance(Main.MODID)
 	private static Main instance;
     
-    @SidedProxy(clientSide = "bubbletrouble.staminaplus.CommonProxy", serverSide = "bubbletrouble.staminaplus.CommonProxy")
+    @SidedProxy(clientSide = "bubbletrouble.staminaplus.ClientProxy", serverSide = "bubbletrouble.staminaplus.CommonProxy")
     public static CommonProxy proxy;
     
 	public static SimpleNetworkWrapper modChannel;

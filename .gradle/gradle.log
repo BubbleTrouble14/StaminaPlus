@@ -17,7 +17,7 @@ This mapping 'snapshot_20170521' was designed for MC 1.11! Use at your own peril
 :apiClasses UP-TO-DATE
 :sourceMainJava
 :compileJava
-:processResources UP-TO-DATE
+:processResources
 :classes
 :jar
 :sourceTestJava UP-TO-DATE
@@ -42,4 +42,4 @@ remapping source...
 
 BUILD SUCCESSFUL
 
-Total time: 10.111 secs
+Total time: 13.677 secs
