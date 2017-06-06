@@ -15,9 +15,12 @@ import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.client.event.FOVUpdateEvent;
+import net.minecraftforge.common.config.Config;
+import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
@@ -25,7 +28,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 
 public class EventHandler  
-{
+{	
     @SubscribeEvent   
     public void onPlayerJoin(PlayerLoggedInEvent evt)
     {
@@ -194,6 +197,7 @@ public class EventHandler
     			Main.modChannel.sendTo(new StaminaValueMessage(stam.getStamina()), (EntityPlayerMP) p);
     			
     		//	System.out.println(type);
+    			
 			    	switch(type)
 			    	{
 			    		case WALKING : 
@@ -223,7 +227,7 @@ public class EventHandler
 			       			if(standingTicks >= 5)
 			       			{
 			       				standingTicks = 0;
-			       				if(standingMultiplier<=21)standingMultiplier += 1F;
+			       				if(standingMultiplier<=26)standingMultiplier += 1F;
 				    			stam.setStaminaMultiplier(standingMultiplier);
 			       			}
 			       			stam.increaseStamina(0.04F);   
@@ -232,7 +236,7 @@ public class EventHandler
 			       		case JUMPING : 
 			       		{
 			       			standingMultiplier = 0;
-			       			stam.decreaseStamina(6F);  
+			       			stam.decreaseStamina(2.6F);  
 			       		}
 	    		}	
     		}
@@ -246,7 +250,7 @@ public class EventHandler
 	    		else if(stam.getStamina() <= 20F)
 	    		{
 	    		    p.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 0, 4));
-	    		    p.addPotionEffect(new PotionEffect(MobEffects.JUMP_BOOST, 1, -3));
+	    		    p.addPotionEffect(new PotionEffect(MobEffects.JUMP_BOOST, 1, -2));
 	    		}	
     		}
 	}

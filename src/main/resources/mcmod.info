@@ -1,15 +1,15 @@
 [
 {
-  "modid": "examplemod",
-  "name": "Example Mod",
-  "description": "Example placeholder mod.",
-  "version": "${version}",
-  "mcversion": "${mcversion}",
-  "url": "",
+  "modid": "staminaplus",
+  "name": "§bStamina Plus",
+  "description": "§6A mod which brings stamina to the world of minecraft!",
+  "version": "1.1",
+  "mcversion": "1.11.2",
+  "url": "https://minecraft.curseforge.com/projects/staminaplus",
   "updateUrl": "",
-  "authorList": ["ExampleDude"],
-  "credits": "The Forge and FML guys, for making this example",
-  "logoFile": "",
+  "authorList": ["§4BubbleTrouble"],
+  "credits": "none",
+  "logoFile": "/assets/staminaplus/logo.png",
   "screenshots": [],
   "dependencies": []
 }

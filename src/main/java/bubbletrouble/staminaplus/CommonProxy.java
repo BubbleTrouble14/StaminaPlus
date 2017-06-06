@@ -19,15 +19,18 @@ import net.minecraftforge.fml.relauncher.Side;
 public class CommonProxy
 {
     public void init()	
-    {
+    {	
         CapabilityManager.INSTANCE.register(IStamina.class, new StaminaStorage(), Stamina.class);
-
+        
         MinecraftForge.EVENT_BUS.register(new CapabilityHandler());
         MinecraftForge.EVENT_BUS.register(new EventHandler());
     }
     
     public void preInit(FMLPreInitializationEvent evt)
     {
+	//	ModConfig.init(evt.getModConfigurationDirectory());
+	//	MinecraftForge.EVENT_BUS.register(new ModConfig());
+    	
 		setupNetwork(evt);
     }
     

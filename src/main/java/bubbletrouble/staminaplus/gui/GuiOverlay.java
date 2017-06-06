@@ -2,6 +2,7 @@ package bubbletrouble.staminaplus.gui;
 
 import bubbletrouble.staminaplus.ClientStamina;
 import bubbletrouble.staminaplus.Main;
+import bubbletrouble.staminaplus.config.ModConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -27,15 +28,22 @@ public class GuiOverlay
 			}else posY = 0;
 			if (!e.isCancelable() && e.getType().equals(ElementType.EXPERIENCE))
 			{	
-				Overlay(e, + posY);
+				if(ModConfig.show_bar)
+				{
+					Overlay(e, + posY);
+				}
 			}
 		}
 	}
 	
 	public void Overlay(RenderGameOverlayEvent evt, int posY)
 	{
-		int posX = evt.getResolution().getScaledWidth() / 2 + 10;
-		posY = posY + evt.getResolution().getScaledHeight() -49;
+		int offestX = ModConfig.x_offset;
+		int offestY = ModConfig.y_offset;
+		System.out.println(offestY);
+
+		int posX = evt.getResolution().getScaledWidth() / 2 + 10 + offestX;
+		posY = posY + evt.getResolution().getScaledHeight() -49 - offestY;
 		float stamValue = ClientStamina.getStamina();
 		
         mc.renderEngine.bindTexture(OVERLAY);
@@ -46,7 +54,7 @@ public class GuiOverlay
 	        mc.ingameGUI.drawTexturedModalRect(posX, posY, 0, 0, 9, 9);
 	        posX = posX + 8;
 		}
-		posX = evt.getResolution().getScaledWidth() / 2 + 11;
+		posX = evt.getResolution().getScaledWidth() / 2 + 11 + offestX;
 		for(int j = 0; j < BlocksToDraw; j++)
 		{
 			if(j % 2 == 0)

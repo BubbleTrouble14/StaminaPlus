@@ -1,0 +1,6 @@
+# Config GUI strings
+staminaplus.config.title=StaminaPlus Config
+
+staminaplus.general.show_bar=Stamina bar visible
+staminaplus.general.x_offset=Offset of x postion
+staminaplus.general.y_offset=Offset of y postion
