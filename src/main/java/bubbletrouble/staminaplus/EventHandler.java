@@ -1,10 +1,10 @@
 package bubbletrouble.staminaplus;
 
-import org.lwjgl.input.Keyboard;
-
 import bubbletrouble.staminaplus.capabilities.IStamina;
 import bubbletrouble.staminaplus.capabilities.StaminaCapability;
+import bubbletrouble.staminaplus.config.ModConfig;
 import bubbletrouble.staminaplus.network.PlayerActionMessage;
+import bubbletrouble.staminaplus.network.PlayerJumpMessage;
 import bubbletrouble.staminaplus.network.StaminaValueMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -15,14 +15,10 @@ import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.client.event.FOVUpdateEvent;
-import net.minecraftforge.common.config.Config;
-import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
-import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
@@ -36,29 +32,23 @@ public class EventHandler
 		IStamina stam = p.getCapability(StaminaCapability.Stamina, null);
 		stam.setStaminaMultiplier(1F);;
     }
-    @SubscribeEvent   
-    public void onKeyPressed(KeyInputEvent evt)
-    {
-//    	if(Minecraft.getMinecraft().gameSettings.keyBindJump.isPressed() && Minecraft.getMinecraft().gameSettings.autoJump)
-//    	
-//    			{
-//    		System.out.println("dff");
-//    			}
     
-    			
-//	    	if(Keyboard.getEventKeyState()){
-//	    	}
-//	    	else
-//	    	{
-//	    		if(Minecraft.getMinecraft().player.isAirBorne)
-//	    		{
-//	    		System.out.println("once");
-//	    		for(int i = 0; i < 10; i++)
-//	   			Main.modChannel.sendToServer(new PlayerActionMessage(ActionType.JUMPING.name()));
-//	    		}
-//	   	
-//    	}  	
+    private static boolean tryagain;
+    boolean test;
+    @SubscribeEvent
+    public void onPlayerKeyPressed(net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent evt)
+    {
+    	if(Minecraft.getMinecraft().gameSettings.keyBindJump.isPressed())test = true;
+		if(!Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown() && test)
+		{
+ 			Main.modChannel.sendToServer(new PlayerJumpMessage(jumping));
+ 			//System.out.println("fire");
+			test = false;
+			tryagain= true;
+		}
+		else tryagain = false;
     }
+		
     @SubscribeEvent   
     public void onPlayerSleep(PlayerWakeUpEvent evt)
     {
@@ -108,14 +98,16 @@ public class EventHandler
     
 	int count = 0;
     int clientTicks;
-    boolean heldKey = true;
+    int jumpTicks= 0;
+    boolean pressed = false;
+    boolean testagain = false;
     //Client Side
     private void updateClientSide(EntityPlayer p, PlayerTickEvent evt) 
     {  	
     	clientTicks++;
 		if(clientTicks >= 20)
 		{
-			heldKey= true;
+		//	heldKey= true;
 			//p.sendMessage(new TextComponentString(String.valueOf(ClientStamina.getStamina())));
 			clientTicks = 0;
 		}
@@ -136,32 +128,26 @@ public class EventHandler
 	    }
     	else
 	    {
-    		Main.modChannel.sendToServer(new PlayerActionMessage(ActionType.STANDING.name()));	
+    		if(!Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown() && p.onGround)
+    		{
+    			Main.modChannel.sendToServer(new PlayerActionMessage(ActionType.STANDING.name()));	
+    		}
+    		else Main.modChannel.sendToServer(new PlayerActionMessage(ActionType.JUMPED.name()));	
 	    }    	
 	 //   if(!p.onGround && Minecraft.getMinecraft().gameSettings.keyBindJump.isPressed())
-    	if(Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown())
+       	if(Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown())
      	{
      		if(p.onGround)
      		{
+     		//	p.set
      			Main.modChannel.sendToServer(new PlayerActionMessage(ActionType.JUMPING.name()));
-     		}		
-     	} 
-    	if(Minecraft.getMinecraft().gameSettings.keyBindJump.isPressed() && heldKey)
-    	{
- 			Main.modChannel.sendToServer(new PlayerActionMessage(ActionType.JUMPING.name()));
-     		heldKey = false;
-    	}
-//    	if(Keyboard.getEventKeyState()){
-//    	}
-//    	else
-//    	{
-//    		if(p.isAirBorne && !p.onGround)
-//    		{
-//    		System.out.println("once");
-//   			Main.modChannel.sendToServer(new PlayerActionMessage(ActionType.JUMPING.name()));
-//    		}
-//   	
-//    	}  	
+    		}	
+     	}
+      // 	if(p.isAirBorne) testagain = true;
+       //	if(tryagain)
+      // 	{
+       //		Main.modChannel.sendToServer(new PlayerActionMessage(ActionType.JUMPED.name()));
+      //	}
 		
 	    if(ClientStamina.getStamina() >= 50)
 	    {
@@ -175,7 +161,16 @@ public class EventHandler
     //Server Side
     private int ticks;
     public static int standingTicks;
-    private float standingMultiplier = 0F;
+    public static float standingMultiplier = 0F;
+    
+    //Values
+    private float walking = ModConfig.walking /10;
+    private float sneaking = ModConfig.sneaking /10;
+    private float sprinting = ModConfig.sprinting/10;
+    private float standing = ModConfig.standing/10;
+    private float jumping = ModConfig.jumping;
+    private double increaser_per_tick = ModConfig.increase_multiplier*20;
+
 
     private void updateServerSide(EntityPlayer p, PlayerTickEvent evt) 
     {
@@ -190,54 +185,63 @@ public class EventHandler
     		//TODO
     		System.out.println(stam.getStamina());
     		}
+    	//	System.out.println(stam.getStaminaMultiplier());
     	
     		if(playerAction != null && !p.capabilities.isCreativeMode)
     		{
         		ActionType type = ActionType.valueOf(playerAction);
     			Main.modChannel.sendTo(new StaminaValueMessage(stam.getStamina()), (EntityPlayerMP) p);
     			
-    		//	System.out.println(type);
-    			
+    	//		System.out.println(type);
 			    	switch(type)
 			    	{
 			    		case WALKING : 
 			    		{
 			       			standingMultiplier = 0;
 			    			stam.setStaminaMultiplier(1F);
-			    			stam.increaseStamina(0.25F);
+			    			stam.increaseStamina(walking);
 			    		}
 			    		break;
 			    		case SPRINTING : 
 			    		{
 			       			standingMultiplier = 0;
 			    			stam.setStaminaMultiplier(1F);
-			    			stam.decreaseStamina(0.3F); 
+			    			stam.decreaseStamina(sprinting); 
 			    		}
 			    		break;
 			       		case SNEAKING : 
 			       		{
 			       			standingMultiplier = 0;
 			    			stam.setStaminaMultiplier(1F);
-			       			stam.increaseStamina(0.2F);  
+			       			stam.increaseStamina(sneaking);  
 			       		}
 			    		break;
 			       		case STANDING : 
 			       		{
 			       			standingTicks++;
-			       			if(standingTicks >= 5)
+			       			if(standingTicks >= increaser_per_tick)
 			       			{
 			       				standingTicks = 0;
-			       				if(standingMultiplier<=26)standingMultiplier += 1F;
+			       				if(standingMultiplier<=11)standingMultiplier += 1F;
 				    			stam.setStaminaMultiplier(standingMultiplier);
 			       			}
-			       			stam.increaseStamina(0.04F);   
+			       			stam.increaseStamina(standing);   
 			       		}
 			    		break;
 			       		case JUMPING : 
 			       		{
+			    			stam.setStaminaMultiplier(1F);
 			       			standingMultiplier = 0;
-			       			stam.decreaseStamina(2.6F);  
+			       			stam.decreaseStamina(jumping/2);  
 			       		}
+			    		break;
+			       		case JUMPED : 
+			       		{
+			    			stam.setStaminaMultiplier(1F);
+			       			standingMultiplier = 0;
+			       			//stam.decreaseStamina(jumping/6);  
+			       		}
+			    		break;
 	    		}	
     		}
     		if(!p.capabilities.isCreativeMode)

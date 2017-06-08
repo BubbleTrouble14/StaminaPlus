@@ -19,7 +19,28 @@ public class ModConfig
 
 	@Config.Comment("The y coordinate offset of the bar")
 	public static int y_offset = 0;
-	//	}
+	
+	@Config.Comment("The stamina increase multiplier when standing per sec")
+	public static double increase_multiplier = 1.5;
+	
+	@Config.Comment("The max Stamina")
+	public static float max_stamina = 200F;
+	
+	@Config.Comment("The walking increase value")
+	public static float walking = 2.5F;
+	
+	@Config.Comment("The standing increase value")
+	public static float standing = 1.5F;
+	
+	@Config.Comment("The sprinting decrease value")
+	public static float sprinting = 3.0F;
+	
+	@Config.Comment("The sneaking increase value")
+	public static float sneaking = 2.0F;
+	
+	@Config.Comment("The jumping decrease value")
+	public static float jumping = 10.0F;
+	
 	
 	@Mod.EventBusSubscriber
 	private static class EventHandler 

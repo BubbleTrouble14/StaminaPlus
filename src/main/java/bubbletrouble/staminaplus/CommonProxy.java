@@ -5,6 +5,7 @@ import bubbletrouble.staminaplus.capabilities.IStamina;
 import bubbletrouble.staminaplus.capabilities.Stamina;
 import bubbletrouble.staminaplus.capabilities.StaminaStorage;
 import bubbletrouble.staminaplus.network.PlayerActionMessage;
+import bubbletrouble.staminaplus.network.PlayerJumpMessage;
 import bubbletrouble.staminaplus.network.StaminaValueMessage;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -43,5 +44,6 @@ public class CommonProxy
 		
 		modChannel.registerMessage(PlayerActionMessage.Handler.class, PlayerActionMessage.class, id++, Side.SERVER);
 		modChannel.registerMessage(StaminaValueMessage.Handler.class, StaminaValueMessage.class, id++, Side.CLIENT);
+		modChannel.registerMessage(PlayerJumpMessage.Handler.class, PlayerJumpMessage.class, id++, Side.SERVER);
 	}
 }

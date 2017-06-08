@@ -1,6 +1,7 @@
 package bubbletrouble.staminaplus.capabilities;
 
 import bubbletrouble.staminaplus.Main;
+import bubbletrouble.staminaplus.config.ModConfig;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -15,6 +16,6 @@ public class CapabilityHandler
     public void attachPlayerCapability(AttachCapabilitiesEvent<Entity> event)
     {
         if (!(event.getObject() instanceof EntityPlayer)) return;
-        	event.addCapability(STAMINA, new StaminaCapability(200F));   	
+        	event.addCapability(STAMINA, new StaminaCapability(ModConfig.max_stamina));   	
     }      
 }	

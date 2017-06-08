@@ -22,7 +22,7 @@ public class GuiOverlay
 		if(!p.capabilities.isCreativeMode)
 		{
 			int posY = 0;
-			if(p.isInWater() && p.getAir() < 300)
+			if(p.isInWater() && p.getAir() < 300 && ModConfig.x_offset == 0 && ModConfig.y_offset == 0)
 			{
 				posY = -10;
 			}else posY = 0;
@@ -40,14 +40,13 @@ public class GuiOverlay
 	{
 		int offestX = ModConfig.x_offset;
 		int offestY = ModConfig.y_offset;
-		System.out.println(offestY);
 
 		int posX = evt.getResolution().getScaledWidth() / 2 + 10 + offestX;
 		posY = posY + evt.getResolution().getScaledHeight() -49 - offestY;
 		float stamValue = ClientStamina.getStamina();
 		
         mc.renderEngine.bindTexture(OVERLAY);
-        int BlocksToDraw = (int)stamValue/10;
+        int BlocksToDraw = (int) (stamValue*20/ModConfig.max_stamina); //(int)stamValue/10;
 
 		for(int i = 0; i < 10; i++)
 		{
